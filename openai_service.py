@@ -74,7 +74,7 @@ class OpenAIService:
                     previous_messages_user_section = ""
 
                 payload = {
-                    "model": "gpt-4o-mini",
+                    "model": "gpt-4o",
                     "messages": [
                         {
                             "role": "system",
