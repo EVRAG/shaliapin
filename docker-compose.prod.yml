@@ -22,17 +22,15 @@ services:
       start_period: 40s
     networks:
       - shalapin-network
-    # Не публикуем порт наружу в production
-    expose:
-      - "8000"
+    ports:
+      - "0.0.0.0:8000:8000"
 
   frontend:
     build: ./frontend
     container_name: shalapin-bot-frontend
     restart: unless-stopped
-    # В production используем внутренний порт, внешний Nginx будет проксировать
     ports:
-      - "127.0.0.1:8080:80"
+      - "0.0.0.0:8080:80"
     depends_on:
       backend:
         condition: service_healthy
