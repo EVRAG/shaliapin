@@ -1,0 +1,22 @@
+# Пример systemd service файла
+# Скопируйте в /etc/systemd/system/shalapin-bot.service
+# и замените пути на актуальные
+
+[Unit]
+Description=Shalapin Bot Docker Compose
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/shalapin-bot
+ExecStart=/usr/local/bin/docker-compose -f docker-compose.prod.yml up -d
+ExecStop=/usr/local/bin/docker-compose -f docker-compose.prod.yml down
+TimeoutStartSec=0
+User=your-username
+Group=docker
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: shalapin-bot-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - DATABASE_PATH=/app/data/messages.db
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+    volumes:
+      # Монтируем директорию с базой данных для персистентности
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - shalapin-network
+
+  frontend:
+    build: ./frontend
+    container_name: shalapin-bot-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - shalapin-network
+
+networks:
+  shalapin-network:
+    driver: bridge
+
